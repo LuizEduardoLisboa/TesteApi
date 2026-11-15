@@ -2,6 +2,8 @@
 using ApiTeste.Domain;
 using ApiTeste.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class UsuarioService : IUsuarioService
 {
@@ -29,6 +31,8 @@ public class UsuarioService : IUsuarioService
 
     public async Task<List<Usuario>> ListarAsync()
     {
-        return await _context.Usuarios.ToListAsync();
+        return await _context.Usuarios
+            .AsNoTracking() 
+            .ToListAsync();
     }
 }

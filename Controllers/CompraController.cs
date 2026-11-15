@@ -59,23 +59,41 @@ public class ComprasController : ControllerBase
     {
         try
         {
-            Compra compra = await _service.ListarUltimaAsync();
+            Compra? ultimaCompra = await _service.ObterUltimaAsync();
 
-            if (compra == null)
+            if (ultimaCompra == null)
             {
-                return NotFound(new ErrorResponse(
-                    "Nenhuma compra encontrada"
-                ));
+                return NotFound(new ErrorResponse("Nenhuma compra encontrada"));
             }
 
-            return Ok(compra);
+            return Ok(ultimaCompra);
         }
         catch (Exception ex)
-        {
+        { 
             return StatusCode(500, new ErrorResponse(
-                "Erro ao buscar última compra",
+                "Erro ao listar a última compra",
                 ex.Message
             ));
         }
     }
+
+    [HttpGet("relatorio")]
+    public async Task<IActionResult> ExportarRelatorio()
+    {
+        try
+        {
+            string csv = await _service.GerarRelatorioCsvAsync(); 
+            var bytes = System.Text.Encoding.UTF8.GetBytes(csv);
+
+            return File(bytes, "text/csv", "relatorio_compras.csv");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ErrorResponse(
+                "Erro ao exportar relatório",
+                ex.Message
+            ));
+        }
+    }
+
 }

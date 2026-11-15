@@ -1,5 +1,51 @@
 [
   {
+    "ContainingType": "ComprasController",
+    "Method": "Criar",
+    "RelativePath": "api/compras",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "CriarCompraDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComprasController",
+    "Method": "Listar",
+    "RelativePath": "api/compras",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComprasController",
+    "Method": "ExportarRelatorio",
+    "RelativePath": "api/compras/relatorio",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComprasController",
+    "Method": "ListarUltima",
+    "RelativePath": "api/compras/ultima",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ProdutosController",
     "Method": "Criar",
     "RelativePath": "api/produtos",

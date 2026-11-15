@@ -2,6 +2,8 @@
 using ApiTeste.Domain;
 using ApiTeste.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class ProdutoService : IProdutoService
 {
@@ -28,6 +30,8 @@ public class ProdutoService : IProdutoService
 
     public async Task<List<Produto>> ListarAsync()
     {
-        return await _context.Produtos.ToListAsync();
+        return await _context.Produtos
+            .AsNoTracking()
+            .ToListAsync();
     }
 }

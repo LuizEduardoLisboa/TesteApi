@@ -1,4 +1,6 @@
 ﻿using ApiTeste.Domain;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ApiTeste.Services.Interfaces
 {
@@ -6,5 +8,7 @@ namespace ApiTeste.Services.Interfaces
     {
         Task<Compra> CriarAsync(CriarCompraDto dto);
         Task<List<Compra>> ListarAsync();
+        Task<Compra?> ObterUltimaAsync();
+        Task<string> GerarRelatorioCsvAsync();
     }
 }

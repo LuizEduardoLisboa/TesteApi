@@ -1,73 +1,193 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ApiTeste - Simulador</title>
-<style>
-  body { font-family: Segoe UI, Arial, sans-serif; margin: 0; background: #f4f6f8; color: #222; }
-  header { background: #1e3a5f; color: #fff; padding: 14px 24px; }
-  header a { color: #cfe3ff; font-size: 14px; }
-  main { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; padding: 16px 24px; }
-  section { background: #fff; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
-  h2 { margin-top: 0; font-size: 18px; }
-  label { display: block; font-size: 13px; margin-top: 8px; }
-  input { width: 100%; box-sizing: border-box; padding: 6px 8px; border: 1px solid #ccc; border-radius: 4px; }
-  button { margin-top: 10px; padding: 7px 14px; border: 0; border-radius: 4px; background: #2d6cdf; color: #fff; cursor: pointer; }
-  button.sec { background: #6c757d; }
-  pre { background: #111; color: #9fe39f; padding: 10px; border-radius: 4px; max-height: 260px; overflow: auto; font-size: 12px; white-space: pre-wrap; }
-  .st { font-size: 12px; font-weight: bold; }
-  .ok { color: #1a7f37; } .err { color: #c62828; }
-</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ApiTeste - Simulador</title>
+    <style>
+        body {
+            font-family: Segoe UI, Arial, sans-serif;
+            margin: 0;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #1e3a5f;
+            color: #fff;
+            padding: 14px 24px;
+        }
+
+            header a {
+                color: #cfe3ff;
+                font-size: 14px;
+            }
+
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+            padding: 16px 24px;
+        }
+
+        section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 7px 14px;
+            border: 0;
+            border-radius: 4px;
+            background: #2d6cdf;
+            color: #fff;
+            cursor: pointer;
+        }
+
+            button.sec {
+                background: #6c757d;
+            }
+
+        pre {
+            background: #111;
+            color: #9fe39f;
+            padding: 10px;
+            border-radius: 4px;
+            max-height: 260px;
+            overflow: auto;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+
+        .st {
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .ok {
+            color: #1a7f37;
+        }
+
+        .err {
+            color: #c62828;
+        }
+    </style>
 </head>
 <body>
-<header>
-  <strong>ApiTeste - Simulador de chamadas</strong> &nbsp; <a href="/swagger">Swagger</a>
-</header>
-<main>
-  <section>
-    <h2>Usuários</h2>
-    <label>Nome <input id="uNome"></label>
-    <label>Email <input id="uEmail" type="email"></label>
-    <label>Telefone <input id="uTelefone"></label>
-    <button onclick="call('POST','/api/usuarios',{nome:v('uNome'),email:v('uEmail'),telefone:v('uTelefone')},'uOut')">Criar</button>
-    <button class="sec" onclick="call('GET','/api/usuarios',null,'uOut')">Listar</button>
-    <div class="st" id="uOutSt"></div><pre id="uOut"></pre>
-  </section>
-  <section>
-    <h2>Produtos</h2>
-    <label>Nome <input id="pNome"></label>
-    <label>Descrição <input id="pDescricao"></label>
-    <button onclick="call('POST','/api/produtos',{nome:v('pNome'),descricao:v('pDescricao')},'pOut')">Criar</button>
-    <button class="sec" onclick="call('GET','/api/produtos',null,'pOut')">Listar</button>
-    <div class="st" id="pOutSt"></div><pre id="pOut"></pre>
-  </section>
-  <section>
-    <h2>Compras</h2>
-    <label>Usuário Id <input id="cUsuarioId" type="number"></label>
-    <label>Produto Id <input id="cProdutoId" type="number"></label>
-    <label>Rota base <input id="cRota" value="/api/compras"></label>
-    <label>Rota da última compra <input id="cUltima" value="/api/compras/ultima"></label>
-    <button onclick="call('POST',v('cRota'),{usuarioId:+v('cUsuarioId'),produtoId:+v('cProdutoId')},'cOut')">Criar</button>
-    <button class="sec" onclick="call('GET',v('cRota'),null,'cOut')">Listar</button>
-    <button class="sec" onclick="call('GET',v('cUltima'),null,'cOut')">Última compra</button>
-    <div class="st" id="cOutSt"></div><pre id="cOut"></pre>
-  </section>
-</main>
-<script>
-  const v = id => document.getElementById(id).value;
-  async function call(method, url, body, out) {
-    const st = document.getElementById(out + 'St'), pre = document.getElementById(out);
-    st.textContent = method + ' ' + url + ' ...'; st.className = 'st'; pre.textContent = '';
-    const t0 = performance.now();
-    try {
-      const r = await fetch(url, { method, headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined });
-      const txt = await r.text();
-      st.textContent = method + ' ' + url + ' -> ' + r.status + ' ' + r.statusText + ' (' + Math.round(performance.now() - t0) + ' ms)';
-      st.className = 'st ' + (r.ok ? 'ok' : 'err');
-      try { pre.textContent = JSON.stringify(JSON.parse(txt), null, 2); } catch { pre.textContent = txt || '(sem conteúdo)'; }
-    } catch (e) { st.textContent = 'Falha: ' + e.message; st.className = 'st err'; }
-  }
-</script>
+    <header>
+        <strong>ApiTeste - Simulador de chamadas</strong>   <a href="/swagger">Swagger</a>
+    </header>
+    <main>
+        <section>
+            <h2>Usuários</h2>
+            <label>Nome <input id="uNome"></label>
+            <label>Email <input id="uEmail" type="email"></label>
+            <label>Telefone <input id="uTelefone"></label>
+            <button onclick="criarUsuario()">Criar</button>
+            <button class="sec" onclick="call('GET','/api/usuarios',null,'uOut')">Listar</button>
+            <div class="st" id="uOutSt"></div><pre id="uOut"></pre>
+        </section>
+
+        <section>
+            <h2>Produtos</h2>
+            <label>Nome <input id="pNome"></label>
+            <label>Descrição <input id="pDescricao"></label>
+            <button onclick="criarProduto()">Criar</button>
+            <button class="sec" onclick="call('GET','/api/produtos',null,'pOut')">Listar</button>
+            <div class="st" id="pOutSt"></div><pre id="pOut"></pre>
+        </section>
+
+        <section>
+            <h2>Compras</h2>
+            <label>Usuário Id <input id="cUsuarioId" type="number"></label>
+            <label>Produto Id <input id="cProdutoId" type="number"></label>
+            <label>Rota base <input id="cRota" value="/api/compras"></label>
+            <label>Rota da última compra <input id="cUltima" value="/api/compras/ultima"></label>
+            <button onclick="criarCompra()">Criar</button>
+            <button class="sec" onclick="call('GET',v('cRota'),null,'cOut')">Listar</button>
+            <button class="sec" onclick="call('GET',v('cUltima'),null,'cOut')">Última compra</button>
+            <div class="st" id="cOutSt"></div><pre id="cOut"></pre>
+        </section>
+    </main>
+
+    <script>
+        const v = id => document.getElementById(id).value;
+
+        function criarUsuario() {
+            const nome = v('uNome');
+            const email = v('uEmail');
+            const telefone = v('uTelefone');
+
+            if (!nome || !email || !telefone) {
+                alert("Preencha todos os campos do usuário!");
+                return;
+            }
+            call('POST', '/api/usuarios', { nome, email, telefone }, 'uOut');
+        }
+
+        function criarProduto() {
+            const nome = v('pNome');
+            const descricao = v('pDescricao');
+
+            if (!nome || !descricao) {
+                alert("Preencha todos os campos do produto!");
+                return;
+            }
+            call('POST', '/api/produtos', { nome, descricao }, 'pOut');
+        }
+
+        function criarCompra() {
+            const usuarioId = v('cUsuarioId');
+            const produtoId = v('cProdutoId');
+
+            if (!usuarioId || !produtoId) {
+                alert("Preencha os IDs do Usuário e do Produto!");
+                return;
+            }
+            call('POST', v('cRota'), { usuarioId: +usuarioId, produtoId: +produtoId }, 'cOut');
+        }
+
+        async function call(method, url, body, out) {
+            const st = document.getElementById(out + 'St'), pre = document.getElementById(out);
+            st.textContent = method + ' ' + url + ' ...'; st.className = 'st'; pre.textContent = '';
+            const t0 = performance.now();
+            try {
+                const r = await fetch(url, {
+                    method,
+                    headers: body ? { 'Content-Type': 'application/json' } : {},
+                    body: body ? JSON.stringify(body) : undefined
+                });
+                const txt = await r.text();
+                st.textContent = method + ' ' + url + ' -> ' + r.status + ' ' + r.statusText + ' (' + Math.round(performance.now() - t0) + ' ms)';
+                st.className = 'st ' + (r.ok ? 'ok' : 'err');
+                try { pre.textContent = JSON.stringify(JSON.parse(txt), null, 2); } catch { pre.textContent = txt || '(sem conteúdo)'; }
+            } catch (e) {
+                st.textContent = 'Falha: ' + e.message;
+                st.className = 'st err';
+            }
+        }
+    </script>
 </body>
 </html>
